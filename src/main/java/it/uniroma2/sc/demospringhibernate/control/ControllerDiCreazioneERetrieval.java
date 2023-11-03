@@ -77,6 +77,16 @@ public class ControllerDiCreazioneERetrieval
         return caneDao.save(c);
     }
 
+    public boolean cancellaCane(@NotNull long idCane) {
+        boolean retValue = true;
+        try {
+            caneDao.deleteById(idCane);
+        }catch (Exception e){
+            retValue = false;
+        }
+        return retValue;
+    }
+
     public Cane leggiCanePerId(@NotNull Long idCane) {
         return caneDao.getOne(idCane);
     }

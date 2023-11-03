@@ -5,10 +5,7 @@ import it.uniroma2.sc.demospringhibernate.entity.Persona;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,5 +29,15 @@ public class PersonaRESTEndPoint {
     public ResponseEntity<?> leggiPersone() {
         List<Persona> persone = controllerDiCreazioneERetrieval.leggiPersone();
         return new ResponseEntity<>(persone, HttpStatus.FOUND);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path = "padrone/{id}")
+    public ResponseEntity<?> cercaCaniPerPadrone(@PathVariable(name = "id") Long idPadrone) {
+        try {
+            return new ResponseEntity<>(controllerDiCreazioneERetrieval.cercaCaniPerPadrone(idPadrone), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 }

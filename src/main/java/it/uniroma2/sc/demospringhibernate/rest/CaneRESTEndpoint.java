@@ -1,8 +1,10 @@
 package it.uniroma2.sc.demospringhibernate.rest;
 
-import it.uniroma2.sc.demospringhibernate.control.ControllerDiCreazioneERetrieval;
+
 import it.uniroma2.sc.demospringhibernate.control.IControllerDiCreazioneERetrieval;
 import it.uniroma2.sc.demospringhibernate.entity.Cane;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,9 +12,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/cane/")
 public class CaneRESTEndpoint {
+
+    Logger logger =  LoggerFactory.getLogger(CaneRESTEndpoint.class);
 
     @Autowired
     private IControllerDiCreazioneERetrieval controllerDiCreazioneERetrieval;
@@ -46,6 +51,18 @@ public class CaneRESTEndpoint {
         return new ResponseEntity<>(tuttiICani, HttpStatus.FOUND);
     }
 
+    @RequestMapping(method = RequestMethod.POST, path = "cancella/{idCane}")
+    public ResponseEntity<?> cancellaCane(@PathVariable Long idCane) {
+        if(controllerDiCreazioneERetrieval.cancellaCane(idCane)){
+            logger.info("Deleted successfully dog with id: " + idCane);
+        }else{
+            logger.info("Error in deleting dog with id: " + idCane);
+        }
+        // mapping dto/entità e viceversa
+        return null;
+    }
+
+
     /*@RequestMapping(method = RequestMethod.GET, path = "")
     public List<Cane> leggiCani() {
         return controllerDiCreazioneERetrieval.leggiCani();
@@ -59,15 +76,7 @@ public class CaneRESTEndpoint {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "padrone/{id}")
-    public ResponseEntity<?> cercaCaniPerPadrone(@PathVariable(name = "id") Long idPadrone) {
-        try {
-            return new ResponseEntity<>(controllerDiCreazioneERetrieval.cercaCaniPerPadrone(idPadrone), HttpStatus.OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
-    }
+
 
     @RequestMapping(method = RequestMethod.PUT, path = "generate")
     public ResponseEntity<Void> generateSampleData() {

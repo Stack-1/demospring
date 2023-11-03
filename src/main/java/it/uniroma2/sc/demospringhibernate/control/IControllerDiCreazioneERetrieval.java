@@ -8,6 +8,8 @@ import java.util.List;
 public interface IControllerDiCreazioneERetrieval {
     Cane creaCane(Cane c);
 
+    boolean cancellaCane(long idCane);
+
     Persona creaPersona(Persona p);
 
     List<Persona> leggiPersone();
